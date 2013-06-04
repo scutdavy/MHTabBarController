@@ -37,13 +37,13 @@ static const NSInteger TagOffset = 1000;
 
 	self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 
-	CGRect rect = CGRectMake(0.0f, 0.0f, self.view.bounds.size.width, self.tabBarHeight);
+	CGRect rect = CGRectMake(0.0f, self.view.bounds.size.height-[self tabBarHeight], self.view.bounds.size.width, [self tabBarHeight]);
 	self.tabButtonsContainerView = [[UIView alloc] initWithFrame:rect];
 	self.tabButtonsContainerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	[self.view addSubview:self.tabButtonsContainerView];
 
-	rect.origin.y = self.tabBarHeight;
-	rect.size.height = self.view.bounds.size.height - self.tabBarHeight;
+	rect.origin.y = 0;
+	rect.size.height = self.view.bounds.size.height - [self tabBarHeight];
 	self.contentContainerView = [[UIView alloc] initWithFrame:rect];
 	self.contentContainerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	[self.view addSubview:self.contentContainerView];
@@ -123,7 +123,7 @@ static const NSInteger TagOffset = 1000;
 	NSUInteger index = 0;
 	NSUInteger count = [self.viewControllers count];
 
-	CGRect rect = CGRectMake(0.0f, 0.0f, floorf(self.view.bounds.size.width / count), self.tabBarHeight);
+	CGRect rect = CGRectMake(0.0f, 0.0f, floorf(self.view.bounds.size.width / count), [self tabBarHeight]);
 
 	self.indicatorImageView.hidden = YES;
 
