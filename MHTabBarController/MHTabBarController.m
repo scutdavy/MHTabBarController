@@ -27,7 +27,6 @@ static const NSInteger TagOffset = 1000;
 @interface MHTabBarController ()
 @property (nonatomic) UIView *tabButtonsContainerView;
 @property (nonatomic) UIView *contentContainerView;
-@property (nonatomic) UIView *indicatorImageView;
 @end
 
 @implementation MHTabBarController
@@ -47,9 +46,6 @@ static const NSInteger TagOffset = 1000;
 	self.contentContainerView = [[UIView alloc] initWithFrame:rect];
 	self.contentContainerView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	[self.view addSubview:self.contentContainerView];
-
-	self.indicatorImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"MHTabBarIndicator"]];
-	[self.view addSubview:self.indicatorImageView];
 
 	[self reloadTabButtons];
 }
@@ -76,7 +72,6 @@ static const NSInteger TagOffset = 1000;
 		self.view = nil;
 		self.tabButtonsContainerView = nil;
 		self.contentContainerView = nil;
-		self.indicatorImageView = nil;
 	}
 }
 
@@ -125,8 +120,6 @@ static const NSInteger TagOffset = 1000;
 
 	CGRect rect = CGRectMake(0.0f, 0.0f, floorf(self.view.bounds.size.width / count), [self tabBarHeight]);
 
-	self.indicatorImageView.hidden = YES;
-
 	NSArray *buttons = [self.tabButtonsContainerView subviews];
 	for (UIButton *button in buttons) {
 		if (index == count - 1)
@@ -135,19 +128,8 @@ static const NSInteger TagOffset = 1000;
 		button.frame = rect;
 		rect.origin.x += rect.size.width;
 
-		if (index == self.selectedIndex)
-			[self centerIndicatorOnButton:button];
-
 		++index;
 	}
-}
-
-- (void)centerIndicatorOnButton:(UIButton *)button {
-	CGRect rect = self.indicatorImageView.frame;
-	rect.origin.x = button.center.x - floorf(self.indicatorImageView.frame.size.width/2.0f);
-	rect.origin.y = self.tabBarHeight - self.indicatorImageView.frame.size.height;
-	self.indicatorImageView.frame = rect;
-	self.indicatorImageView.hidden = NO;
 }
 
 - (void)setViewControllers:(NSArray *)newViewControllers {
@@ -226,7 +208,6 @@ static const NSInteger TagOffset = 1000;
 		else if (fromViewController == nil) {// don't animate
 			toViewController.view.frame = self.contentContainerView.bounds;
 			[self.contentContainerView addSubview:toViewController.view];
-			[self centerIndicatorOnButton:toButton];
 
 			if ([self.delegate respondsToSelector:@selector(mh_tabBarController:didSelectViewController:atIndex:)])
 				[self.delegate mh_tabBarController:self didSelectViewController:toViewController atIndex:newSelectedIndex];
@@ -254,7 +235,6 @@ static const NSInteger TagOffset = 1000;
 
 					fromViewController.view.frame = rect;
 					toViewController.view.frame = self.contentContainerView.bounds;
-					[self centerIndicatorOnButton:toButton];
 				}
 				completion:^(BOOL finished) {
 					self.tabButtonsContainerView.userInteractionEnabled = YES;
@@ -268,7 +248,6 @@ static const NSInteger TagOffset = 1000;
 
 			toViewController.view.frame = self.contentContainerView.bounds;
 			[self.contentContainerView addSubview:toViewController.view];
-			[self centerIndicatorOnButton:toButton];
 
 			if ([self.delegate respondsToSelector:@selector(mh_tabBarController:didSelectViewController:atIndex:)])
 				[self.delegate mh_tabBarController:self didSelectViewController:toViewController atIndex:newSelectedIndex];
